@@ -1,16 +1,16 @@
 //*****************************************************
-//		
-//		Construção de um robô para disciplina de 
+//
+//		Construção de um robô para disciplina de
 //				   Computação Gráfica
-//		
+//
 //		Prof:      Evandro L. Viapiana
-//		
+//
 //		Aluno:	   Anderson A. Fontana
-//		
-//		
+//
+//
 //*****************************************************
 
-// #include <stdlib.h>
+#include <stdlib.h>
 #include <stdio.h>
 #include <iostream>
 #include <math.h>
@@ -142,7 +142,7 @@ int LoadBMP(char* filename)
 	retorno = fread(image,1,imageSize,fp_arquivo);
 
 	if (retorno != imageSize) {
-		free (image);
+		delete (image);
 		SAIR;
 	}
 
@@ -169,7 +169,7 @@ int LoadBMP(char* filename)
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, Width, Height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
 
 	fclose (fp_arquivo);
-	free (image);
+	delete (image);
 	return 1;
 }
 
@@ -210,29 +210,29 @@ void Texturizacao() //faz o carregamento
 // Função responsável pela especificação dos parâmetros de iluminação
 void DefineIluminacao (void)
 {
-	GLfloat luzAmbiente[4]={0.2,0.2,0.2,1.0}; 
-	GLfloat luzDifusa[4]={0.7,0.7,0.7,1.0};	   // "cor" 
-	GLfloat luzEspecular[4]={1.0, 1.0, 1.0, 1.0};// "brilho" 
-	GLfloat posicaoLuz[4]={0.0, 50.0, 50.0, 1.0};
+	GLfloat luzAmbiente[4]={0.2,0.2,0.2,1.0};
+	GLfloat luzDifusa[4]={0.7,0.7,0.7,1.0};	   // "cor"
+	GLfloat luzEspecular[4]={1.0, 1.0, 1.0, 1.0};// "brilho"
+	GLfloat posicaoLuz[4]={0.0, 50.0, 200.0, 1.0};
 
 	// Capacidade de brilho do material
-	GLfloat especularidade[4]={1.0,1.0,1.0,1.0}; 
+	GLfloat especularidade[4]={1.0,1.0,1.0,1.0};
 	// GLint especMaterial = 60;
 	GLint especMaterial = 20;
 
-	// Define a refletância do material 
+	// Define a refletância do material
 	glMaterialfv(GL_FRONT,GL_SPECULAR, especularidade);
 	// Define a concentração do brilho
 	glMateriali(GL_FRONT,GL_SHININESS,especMaterial);
 
-	// Ativa o uso da luz ambiente 
+	// Ativa o uso da luz ambiente
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, luzAmbiente);
 
 	// Define os parâmetros da luz de número 0
-	glLightfv(GL_LIGHT0, GL_AMBIENT, luzAmbiente); 
+	glLightfv(GL_LIGHT0, GL_AMBIENT, luzAmbiente);
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, luzDifusa );
 	glLightfv(GL_LIGHT0, GL_SPECULAR, luzEspecular );
-	glLightfv(GL_LIGHT0, GL_POSITION, posicaoLuz );   
+	glLightfv(GL_LIGHT0, GL_POSITION, posicaoLuz );
 }
 
 
@@ -280,7 +280,7 @@ void DrawCube(int texture, int w, int h, int d)
 		glTexCoord2f( TXTx[3] , TXTy[2] ); glVertex3f(  w ,  h , -d );
 		glTexCoord2f( TXTx[3] , TXTy[1] ); glVertex3f(  w , -h , -d );
 		glTexCoord2f( TXTx[4] , TXTy[1] ); glVertex3f( -w , -h , -d );
-		
+
 		// Face superior
 		glNormal3f(   0.0 , 1.0 ,  0.0 );	// Normal da face
 		glTexCoord2f( TXTx[1] , TXTy[2] ); glVertex3f( -w ,  h ,  d );
@@ -425,16 +425,16 @@ void desenha_robo_3D(void)
 // Função callback de redesenho da janela de visualização
 void Desenha(void)
 {
-	// Limpa a janela de visualização com a cor  
+	// Limpa a janela de visualização com a cor
 	// de fundo definida previamente
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	
+
 	// Chama a função que especifica os parâmetros de iluminação
 	DefineIluminacao();
 
 
 	glColor3f(1.0f, 1.0f, 1.0f);
-	// Função da GLUT para fazer o desenho de um "torus" 
+	// Função da GLUT para fazer o desenho de um "torus"
 	// com a cor corrente
 	glPushMatrix();
 	SRT(CENA);
@@ -478,14 +478,14 @@ void EspecificaParametrosVisualizacao(void)
 
 // Função responsável por inicializar parâmetros e variáveis
 void Inicializa (void)
-{   
+{
 	// Define a cor de fundo da janela de visualização como branca
 	glClearColor(0.8, 0.8, 0.8, 1.0);
-	
+
 	// Habilita a definição da cor do material a partir da cor corrente
 	glEnable(GL_COLOR_MATERIAL);
 	//Habilita o uso de iluminação
-	glEnable(GL_LIGHTING);  
+	glEnable(GL_LIGHTING);
 	// Habilita a luz de número 0
 	glEnable(GL_LIGHT0);
 	// Habilita o depth-buffering
@@ -526,12 +526,12 @@ void Inicializa (void)
 	transformacao = 'T';
 	eixo = 'X';
 	passo = 5;
-	 
+
 	// Inicializa a variável que especifica o ângulo da projeção
 	// perspectiva
 	angle=45;
-	
-	// Inicializa as variáveis usadas para alterar a posição do 
+
+	// Inicializa as variáveis usadas para alterar a posição do
 	// observador virtual
 	rotX = 0;
 	rotY = 0;
@@ -551,6 +551,7 @@ void Inicializa (void)
 	cout  << "X Y Z      Escolhe eixo" << endl;
 	cout  << "S R T      Escolhe transformação" << endl;
 	cout  << "+ -        Aplica transformação" << endl;
+	cout  << "W A D      Movimenta robô" << endl;
 	cout  << "0:8        Partes da cena/robo" << endl;
 	cout  << "  0        Seleciona cena" << endl;
 	cout  << "  1        Seleciona robô" << endl;
@@ -569,22 +570,25 @@ char sentido;
 
 void walk()
 {
-	transf[ PERNA_D ].angx += (invWalk ? -passo : passo);
-	transf[ PERNA_E ].angx += (invWalk ? passo : -passo);
+	transf[ PERNA_D ].angx += (invWalk ? -5 : 5);
+	transf[ PERNA_E ].angx += (invWalk ? 5 : -5);
 
 	if (transf[ PERNA_D ].angx > 20 || transf[ PERNA_E ].angx > 20)
 		invWalk = !invWalk;
 
-	cout << transf[ ROBO ].angy << endl;
 	int ang = transf[ ROBO ].angy;
-	ang = abs(ang % 360);
-	float res = 2 * M_PI * ang / (360/passo); //;
+	if (ang < 0)
+		ang = 360 + (ang % 360);
+	else
+		ang = ang % 360;
+	float res = 2 * M_PI * ang / 360;
+	// cout << res << endl;
 	float x = passo * sin( res );
 	float z = passo * cos( res );
 	transf[ ROBO ].dx += x;
 	transf[ ROBO ].dz += z;
-	cout << "X:" << x << endl;
-	cout << "Z:" << z << endl;
+	// cout << "X:" << x << endl;
+	// cout << "Z:" << z << endl;
 }
 
 // Função callback chamada para gerenciar eventos de teclas normais (ESC)
@@ -711,7 +715,7 @@ void Teclado ( GLubyte key , GLint x , GLint y )
 }
 
 // Função callback para tratar eventos de teclas especiais
-void TeclasEspeciais (int tecla, int x, int y)  
+void TeclasEspeciais (int tecla, int x, int y)
 {
 	switch (tecla)
 	{
@@ -780,7 +784,7 @@ void GerenciaMovim(int x, int y)
 	glutPostRedisplay();
 }
 
-// Função callback chamada quando o tamanho da janela é alterado 
+// Função callback chamada quando o tamanho da janela é alterado
 void AlteraTamanhoJanela(GLsizei w, GLsizei h)
 {
 	// Para previnir uma divisão por zero
@@ -788,54 +792,54 @@ void AlteraTamanhoJanela(GLsizei w, GLsizei h)
 
 	// Especifica as dimensões da viewport
 	glViewport(0, 0, w, h);
- 
+
 	// Calcula a correção de aspecto
 	fAspect = (GLfloat)w/(GLfloat)h;
 
 	EspecificaParametrosVisualizacao();
 }
 
-// Programa Principal 
+// Programa Principal
 int main(int argc , char *argv[])
 {
 	glutInit( &argc , argv );
 
 	// Define o modo de operação da GLUT
-	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH); 
-	
+	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
+
 	// Especifica o tamanho inicial em pixels da janela GLUT
-	glutInitWindowSize(LARGURA, ALTURA); 
- 
+	glutInitWindowSize(LARGURA, ALTURA);
+
 	// Especifica a posição inicial da janela GLUT
 	glutInitWindowPosition( ( glutGet( GLUT_SCREEN_WIDTH  ) - LARGURA ) / 2 ,
 							( glutGet( GLUT_SCREEN_HEIGHT ) - ALTURA  ) / 2 );
- 
+
 	// Cria a janela passando como argumento o título da mesma
 	glutCreateWindow("Robo - Anderson A. Fontana");
- 
+
 	// Registra a função callback de redesenho da janela de visualização
 	glutDisplayFunc(Desenha);
-  
+
 	// Registra a função callback de redimensionamento da janela de visualização
 	glutReshapeFunc(AlteraTamanhoJanela);
 
-	// Registra a função callback para tratamento das teclas normais 
+	// Registra a função callback para tratamento das teclas normais
 	glutKeyboardFunc (Teclado);
 
 	// Registra a função callback para tratamento das teclas especiais
 	glutSpecialFunc (TeclasEspeciais);
-	 
-	// Registra a função callback para eventos de botões do mouse	
+
+	// Registra a função callback para eventos de botões do mouse
 	glutMouseFunc(GerenciaMouse);
-	 
-	// Registra a função callback para eventos de movimento do mouse	
+
+	// Registra a função callback para eventos de movimento do mouse
 	glutMotionFunc(GerenciaMovim);
 
-	// Chama a função responsável por fazer as inicializações 
+	// Chama a função responsável por fazer as inicializações
 	Inicializa();
- 
+
 	// Inicia o processamento e aguarda interações do usuário
 	glutMainLoop();
- 
+
 	return 0;
 }
